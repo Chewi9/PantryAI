@@ -1,69 +1,56 @@
-import Image from "next/image";
+import connectToDatabase from "@/lib/mongodb";
+import Product from "@/models/Product";
+import BotonEliminar from "@/components/BotonEliminar";
 
-export default function Home() {
+// Esta función obliga a Next.js a actualizar la página cada vez que entramos
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  // 1. Conectamos a la base de datos y buscamos todos los productos
+  await connectToDatabase();
+  
+  // lean() convierte los documentos de MongoDB a objetos de JavaScript normales
+  const productos = await Product.find({}).sort({ fechaAgregado: -1 }).lean();
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <main className="min-h-screen bg-gray-50 pb-24">
+      {/* Cabecera de la App */}
+      <header className="bg-emerald-500 text-white p-6 rounded-b-3xl shadow-md">
+        <h1 className="text-3xl font-bold">Mi Armario 🍎</h1>
+        <p className="text-emerald-100 mt-2">Lo que tienes en la cocina</p>
+      </header>
+
+      {/* Lista de productos */}
+      <div className="p-6">
+        {productos.length === 0 ? (
+          <div className="text-center text-gray-500 mt-10">
+            <p>Tu armario está vacío.</p>
+            <p>¡Toca el botón de la cámara para añadir tu compra!</p>
+          </div>
+        ) : (
+          <ul className="space-y-3">
+            {productos.map((producto: any) => (
+              <li 
+                key={producto._id.toString()} 
+                className="bg-white p-4 rounded-xl shadow-sm flex justify-between items-center border border-gray-100"
+              >
+                <span className="font-medium text-gray-800 capitalize">
+                  {producto.nombre}
+                </span>
+                <span className="bg-emerald-100 text-emerald-800 py-1 px-3 rounded-full text-sm font-semibold">
+                  {producto.cantidad} {producto.unidad}
+                </span>
+                <BotonEliminar id={producto._id.toString()} />
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
+
+      {/* Botón flotante para escanear/cámara */}
+      <button className="fixed bottom-8 right-8 bg-emerald-600 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-2xl hover:bg-emerald-700 transition-transform hover:scale-105 active:scale-95">
+        📷
+      </button>
+    </main>
   );
 }
