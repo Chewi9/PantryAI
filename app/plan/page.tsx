@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 export default function PlanPage() {
-  const [dias, setDias] = useState(3);
-  const [comensales, setComensales] = useState(1);
+  const [dias, setDias] = useState<number | string>(3);
+  const [comensales, setComensales] = useState<number | string>(1);
   const [utensilios, setUtensilios] = useState("");
   const [cargando, setCargando] = useState(false);
   const [reemplazando, setReemplazando] = useState<string | null>(null);
@@ -23,12 +23,11 @@ export default function PlanPage() {
       const res = await fetch("/api/plan", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        // Enviamos los comensales a la IA
-        body: JSON.stringify({ dias, utensilios, comensales }),
+        body: JSON.stringify({ dias: Number(dias), utensilios, comensales: Number(comensales) }), // Enviamos el numero de días, utensilios y comensales
       });
 
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Hubo un error al generar la dieta.");
+      if (!res.ok) throw new Error(data.error || "Remya está cansado, prueba otra vez.");
 
       setPlan(data.plan);
     } catch (err: any) {
@@ -47,7 +46,6 @@ export default function PlanPage() {
       });
       
       if (res.ok) {
-        alert("✅ ¡Ingredientes descontados de tu armario!");
         descartarReceta(diaIndex, comidaIndex);
         router.refresh();
       } else {
@@ -58,7 +56,7 @@ export default function PlanPage() {
     }
   };
 
-  // NUEVA FUNCIÓN: Pedir otra receta a la IA
+  // Pedir otra receta concreta
   const cambiarReceta = async (tipo: string, diaIndex: number, comidaIndex: number) => {
     const idReceta = `${diaIndex}-${comidaIndex}`;
     setReemplazando(idReceta);
@@ -73,7 +71,7 @@ export default function PlanPage() {
       const data = await res.json();
       
       if (res.ok && plan) {
-        // Hacemos una copia profunda del plan para actualizar la pantalla
+
         const nuevoPlan = JSON.parse(JSON.stringify(plan));
         nuevoPlan[diaIndex].comidas[comidaIndex] = data;
         setPlan(nuevoPlan);
@@ -87,6 +85,7 @@ export default function PlanPage() {
     }
   };
 
+  // Función para eliminar la receta
   const descartarReceta = (diaIndex: number, comidaIndex: number) => {
     if (!plan) return;
     const nuevoPlan = JSON.parse(JSON.stringify(plan));
@@ -94,6 +93,7 @@ export default function PlanPage() {
     setPlan(nuevoPlan);
   };
 
+  // Guardamos el menú con todos los días completo
   const guardarMenuCompleto = async () => {
     try {
       const res = await fetch("/api/menus", {
@@ -105,7 +105,7 @@ export default function PlanPage() {
         }),
       });
       
-      if (res.ok) alert("💾 ¡Menú completo guardado en tu recetario!");
+      if (res.ok) alert("¡Menú guardado!");
       else alert("Hubo un problema al guardar.");
     } catch (error) {
       alert("Error de conexión al intentar guardar.");
@@ -116,15 +116,33 @@ export default function PlanPage() {
     <main className="min-h-screen bg-gray-50 pb-12">
       <header className="bg-emerald-600 text-white p-6 rounded-b-3xl shadow-md flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Tu Menú 👨‍🍳</h1>
-          <p className="text-emerald-100 mt-1">Totalmente a tu medida</p>
+          <h1 className="text-3xl font-bold">Remya</h1>
+          <p className="text-emerald-100 mt-1">Tu cocinero personal</p>
         </div>
         <Link href="/" className="bg-emerald-700 p-2 rounded-lg hover:bg-emerald-800 transition">
-          ⬅️ Armario
+          ⬅️ Pantry
         </Link>
       </header>
 
       <div className="p-6 max-w-md mx-auto">
+
+        <div className="bg-emerald-50 rounded-2xl p-4 shadow-sm border border-emerald-100 flex items-center gap-4 mb-6 relative overflow-hidden">
+          
+          {/* Avatar de Remya animado para simular que se mueve */}
+          <div className="flex-shrink-0 animate-bounce">
+            <img
+            src="/remya.svg"
+            alt="Remya"
+            className="w-20 h-20 drop-shadow-md"
+            />
+          </div>
+          
+          <div className="relative">
+            <h2 className="font-bold text-emerald-800 text-lg leading-tight">¡Hola! Soy Remya</h2>
+            <p className="text-emerald-600 text-sm mt-1">Dime cuántos somos y qué utensilios tienes. Yo me encargo de la magia.</p>
+          </div>
+        </div>
+
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 flex flex-col gap-4">
           <div className="flex gap-4">
             <div className="flex-1">
@@ -133,7 +151,7 @@ export default function PlanPage() {
                 type="number" 
                 min="1" max="7" 
                 value={dias}
-                onChange={(e) => setDias(Number(e.target.value))}
+                onChange={(e) => setDias(e.target.value)}
                 className="border border-gray-300 rounded-lg p-3 text-lg w-full text-black outline-none focus:border-emerald-500"
               />
             </div>
@@ -143,7 +161,7 @@ export default function PlanPage() {
                 type="number" 
                 min="1" max="10" 
                 value={comensales}
-                onChange={(e) => setComensales(Number(e.target.value))}
+                onChange={(e) => setComensales(e.target.value)}
                 className="border border-gray-300 rounded-lg p-3 text-lg w-full text-black outline-none focus:border-emerald-500"
               />
             </div>

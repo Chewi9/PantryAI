@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 export default function BotonEditar({ id, nombreActual, cantidadActual, unidadActual }: any) {
   const [abierto, setAbierto] = useState(false);
   const [nombre, setNombre] = useState(nombreActual);
-  const [cantidad, setCantidad] = useState(cantidadActual);
+  const [cantidad, setCantidad] = useState <number | string>(cantidadActual);
   const [unidad, setUnidad] = useState(unidadActual);
   const [guardando, setGuardando] = useState(false);
   const router = useRouter();
@@ -19,7 +19,7 @@ export default function BotonEditar({ id, nombreActual, cantidadActual, unidadAc
       await fetch(`/api/productos/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nombre, cantidad, unidad }),
+        body: JSON.stringify({ nombre, cantidad: Number(cantidad), unidad }),
       });
       
       setAbierto(false);
@@ -66,7 +66,7 @@ export default function BotonEditar({ id, nombreActual, cantidadActual, unidadAc
                     step="any"
                     required
                     value={cantidad}
-                    onChange={(e) => setCantidad(Number(e.target.value))}
+                    onChange={(e) => setCantidad(e.target.value)}
                     className="w-full border border-gray-300 rounded-xl p-3 text-gray-800 focus:ring-2 focus:ring-blue-500 outline-none"
                   />
                 </div>
