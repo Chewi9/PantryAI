@@ -16,3 +16,21 @@ export async function DELETE(request: Request, { params }: { params: Promise<{ i
     return NextResponse.json({ error: "Error al eliminar el producto" }, { status: 500 });
   }
 }
+
+export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
+  try {
+    const body = await request.json();
+    await connectToDatabase();
+    const resolvedParams = await params;
+    
+    await Product.findByIdAndUpdate(resolvedParams.id, {
+      nombre: body.nombre,
+      cantidad: body.cantidad,
+      unidad: body.unidad
+    });
+    
+    return NextResponse.json({ mensaje: "Producto actualizado correctamente" });
+  } catch (error) {
+    return NextResponse.json({ error: "Error al actualizar" }, { status: 500 });
+  }
+}

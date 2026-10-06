@@ -4,6 +4,8 @@ import Product from "@/models/Product";
 import BotonEliminar from "@/components/BotonEliminar";
 import BotonCamara from "@/components/BotonCamera";
 import BotonAnadir from "@/components/BotonAnadir";
+import BotonEditar from "@/components/BotonEditar";
+
 
 export const dynamic = "force-dynamic";
 
@@ -12,7 +14,9 @@ export default async function Home() {
   
   const productosMongoose = await Product.find({}).sort({ fechaAgregado: -1 }).lean();
   
-  const productos = productosMongoose.map((producto: any) => ({
+  const productosPlanos = JSON.parse(JSON.stringify(productosMongoose));
+
+  const productos = productosPlanos.map((producto: any) => ({
     id: producto._id.toString(),
     nombre: producto.nombre,
     cantidad: producto.cantidad,
@@ -45,12 +49,26 @@ export default async function Home() {
                 <span className="bg-emerald-100 text-emerald-800 py-1 px-3 rounded-full text-sm font-semibold">
                   {producto.cantidad} {producto.unidad}
                 </span>
-                <BotonEliminar id={producto.id} />
+
+                <div className="flex gap-1">
+
+                  <BotonEditar id={producto.id} nombreActual={producto.nombre} cantidadActual={producto.cantidad} unidadActual={producto.unidad} />
+                
+                  <BotonEliminar id={producto.id} />
+
+                </div>
               </li>
             ))}
           </ul>
         )}
       </div>
+
+      <Link 
+        href="/recetas"
+        className="fixed bottom-24 left-8 bg-amber-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center font-bold hover:bg-amber-600 transition-transform hover:scale-105 active:scale-95"
+      >
+        📖 Mis Recetas
+      </Link>
 
       {/* Botón flotante para ir al Nutricionista */}
       <Link 
