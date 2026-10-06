@@ -7,7 +7,8 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export async function POST(request: Request) {
   try {
-    const { dias, utensilios } = await request.json();
+    // Añadimos 'comensales' a lo que recibimos de la web
+    const { dias, utensilios, comensales } = await request.json();
 
     await connectToDatabase();
     const productosMongoose = await Product.find({}).lean();
@@ -19,18 +20,20 @@ export async function POST(request: Request) {
       );
     }
 
-    // Le pasamos a la IA el ID exacto de la base de datos para que nos lo devuelva
     const listaIngredientes = productosMongoose
       .map((p: any) => `- ${p.nombre}: ${p.cantidad} ${p.unidad} (ID_BASE_DATOS: ${p._id.toString()})`)
       .join("\n");
 
     const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash-lite" });
+    
+    // Le decimos a la IA cuántas personas van a comer
     const prompt = `Eres un nutricionista experto. Tengo estos ingredientes: 
     ${listaIngredientes}
     
     Dispongo de estos utensilios: ${utensilios || "sartén y olla básica"}.
     
-    Crea un plan de comidas de ${dias} días usando PRINCIPALMENTE lo que tengo. Las cantidades que pongas en "ingredientes_usados" DEBEN SER EXACTAS (en gramos, kg, o unidades) y realistas para una ración.
+    Crea un plan de comidas de ${dias} días para ${comensales || 1} personas usando PRINCIPALMENTE lo que tengo.
+    Las cantidades en "ingredientes_usados" DEBEN SER EXACTAS (en gramos, kg, o unidades) calculadas en total para las ${comensales || 1} personas.
     
     Devuelve ÚNICAMENTE un JSON estricto con esta estructura exacta:
     {
@@ -42,7 +45,7 @@ export async function POST(request: Request) {
               "tipo": "Comida", 
               "receta": "Pollo con patatas", 
               "ingredientes_usados": [
-                { "id": "ID_BASE_DATOS_DEL_PRODUCTO", "nombre": "patatas", "cantidad": 200, "unidad": "g" }
+                { "id": "ID_BASE_DATOS_DEL_PRODUCTO", "nombre": "patatas", "cantidad": 400, "unidad": "g" }
               ] 
             }
           ]
