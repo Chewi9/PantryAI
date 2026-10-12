@@ -8,11 +8,11 @@ const RutinaSchema = new Schema({
     grupoMuscular: String,
     ejercicios: [{
       nombre: String,
-      nombre_pt: String,
+      nombre_pt: String, // ¡Este es clave para las fotos!
       series: Number,
       repeticiones: String,
       notas: String,
-      instrucciones: [String] // Guardamos también las instrucciones
+      instrucciones: [String] // ¡Este es clave para el paso a paso!
     }]
   }]
 });

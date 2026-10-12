@@ -5,8 +5,8 @@ import Link from "next/link";
 import toast from "react-hot-toast";
 
 export default function EntrenamientoPage() {
-  const [dias, setDias] = useState<number | string>(3);
-  const [objetivo, setObjetivo] = useState("");
+  const [dias, setDias] = useState<number | string>(5);
+  const [objetivo, setObjetivo] = useState("Todo el cuerpo");
   const [equipamiento, setEquipamiento] = useState("");
   const [cargando, setCargando] = useState(false);
   const [rutina, setRutina] = useState<any[] | null>(null);

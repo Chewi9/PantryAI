@@ -7,9 +7,28 @@ import toast from "react-hot-toast";
 export default function RutinasGuardadasPage() {
   const [rutinas, setRutinas] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
+  
+  // Añadimos el estado para el diccionario de fotos igual que en la pantalla principal
+  const [diccionarioFotos, setDiccionarioFotos] = useState<Record<string, string>>({});
 
   useEffect(() => {
     cargarRutinas();
+
+    // Cargamos el diccionario para saber qué número de foto va con cada ejercicio guardado
+    fetch("/pt-BR.json")
+      .then(res => res.json())
+      .then(data => {
+        const diccionarioInvertido: Record<string, string> = {};
+        for (const codigo in data) {
+          const nombreLimpio = data[codigo]
+            .toLowerCase()
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .trim();
+          diccionarioInvertido[nombreLimpio] = codigo;
+        }
+        setDiccionarioFotos(diccionarioInvertido);
+      })
+      .catch(() => console.log("No se pudo cargar el diccionario pt-BR.json"));
   }, []);
 
   const cargarRutinas = async () => {
@@ -29,7 +48,7 @@ export default function RutinasGuardadasPage() {
     try {
       await fetch(`/api/rutinas/${id}`, { method: "DELETE" });
       toast.success("Rutina borrada");
-      cargarRutinas(); // Recargar la lista
+      cargarRutinas(); 
     } catch (error) {
       toast.error("Error al borrar");
     }
@@ -80,16 +99,106 @@ export default function RutinasGuardadasPage() {
                     </div>
                     
                     <div className="p-4 space-y-4">
-                      {dia.ejercicios.map((ej: any, j: number) => (
-                        <div key={j} className="bg-gray-700 p-3 rounded-lg flex flex-col gap-2">
-                          <h4 className="font-bold text-white text-lg capitalize">{ej.nombre}</h4>
-                          <p className="text-blue-400 font-semibold text-sm">
-                            🔄 {ej.series} series x {ej.repeticiones} reps
-                          </p>
-                          {ej.notas && <p className="text-gray-400 text-xs italic">💡 {ej.notas}</p>}
-                        </div>
-                      ))}
+                      {dia.ejercicios.map((ej: any, j: number) => {
+                        
+                        // 1. Buscamos el código de la foto usando el nombre en portugués guardado
+                        const nombreLimpio = (ej.nombre_pt || ej.nombre || "")
+                          .toLowerCase()
+                          .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+                          .trim(); 
+
+                        let codigoFoto = diccionarioFotos[nombreLimpio];
+
+                        // Buscador inteligente por si acaso
+                        if (!codigoFoto && Object.keys(diccionarioFotos).length > 0) {
+                          const palabras = nombreLimpio.split(" ").filter((p: string) => p.length > 3);
+                          let maxCoincidencias = 0;
+                          for (const nombreDict in diccionarioFotos) {
+                            let coincidencias = 0;
+                            for (const palabra of palabras) {
+                              if (nombreDict.includes(palabra)) coincidencias++;
+                            }
+                            if (coincidencias > maxCoincidencias && coincidencias > 0) {
+                              maxCoincidencias = coincidencias;
+                              codigoFoto = diccionarioFotos[nombreDict];
+                            }
+                          }
+                        }
+
+                        return (
+                          <div key={j} className="bg-gray-700 p-4 rounded-xl flex flex-col gap-4">
+                            
+                            {/* PARTE SUPERIOR: IMÁGENES + TEXTOS */}
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                              
+                              {/* --- ZONA VISUAL: PORTADA Y GIF --- */}
+                              <div className="flex gap-2 flex-shrink-0 mx-auto sm:mx-0">
+                                {/* Portada (JPG) */}
+                                <div className="w-24 h-24 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-500 shadow-inner">
+                                  {codigoFoto ? (
+                                    <img 
+                                      src={`/img/${codigoFoto}.jpg`} 
+                                      alt={`Portada de ${ej.nombre}`}
+                                      className="w-full h-full object-contain p-1"
+                                      onError={(e) => {
+                                        e.currentTarget.style.display = 'none';
+                                        if (e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-3xl text-gray-400">🖼️</span>';
+                                      }}
+                                    />
+                                  ) : (
+                                    <span className="text-3xl text-gray-400">🖼️</span>
+                                  )}
+                                </div>
+
+                                {/* Animación (GIF) */}
+                                <div className="w-24 h-24 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-500 shadow-inner">
+                                  {codigoFoto ? (
+                                    <img 
+                                      src={`/gif/${codigoFoto}.gif`} 
+                                      alt={`Animación de ${ej.nombre}`}
+                                      className="w-full h-full object-contain p-1"
+                                      onError={(e) => {
+                                        e.currentTarget.style.display = 'none';
+                                        if (e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-3xl text-gray-400">▶️</span>';
+                                      }}
+                                    />
+                                  ) : (
+                                    <span className="text-3xl text-gray-400">▶️</span>
+                                  )}
+                                </div>
+                              </div>
+                              
+                              {/* TEXTOS BÁSICOS */}
+                              <div className="flex-1 w-full text-center sm:text-left mt-2 sm:mt-0">
+                                <h4 className="font-bold text-white text-xl leading-tight mb-2 capitalize">{ej.nombre}</h4>
+                                <p className="text-blue-400 font-bold mb-2 text-sm bg-blue-900/30 inline-block px-3 py-1 rounded-full">
+                                  🔄 {ej.series} series x {ej.repeticiones} reps
+                                </p>
+                                {ej.notas && (
+                                  <p className="text-gray-300 text-sm italic leading-relaxed bg-gray-800 p-2 rounded-lg border border-gray-600">
+                                    💡 {ej.notas}
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* PARTE INFERIOR: INSTRUCCIONES PASO A PASO */}
+                            {ej.instrucciones && ej.instrucciones.length > 0 && (
+                              <div className="mt-2 pt-3 border-t border-gray-600">
+                                <h5 className="text-gray-300 font-semibold mb-2 text-sm">Cómo realizarlo:</h5>
+                                <ol className="list-decimal pl-5 space-y-1 text-xs text-gray-400">
+                                  {ej.instrucciones.map((paso: string, index: number) => (
+                                    <li key={index} className="leading-relaxed">{paso}</li>
+                                  ))}
+                                </ol>
+                              </div>
+                            )}
+                            
+                          </div>
+                        );
+                      })}
                     </div>
+
                   </div>
                 ))}
               </div>
