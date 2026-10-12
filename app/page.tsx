@@ -79,6 +79,11 @@ export default async function Home() {
         Acceder a Remya
       </Link>
 
+      <Link href="/entrenamiento" className="bg-blue-600 text-white p-4 rounded-2xl flex flex-col items-center justify-center font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-transform">
+        <span className="text-3xl mb-2">🏋️‍♂️</span>
+        Entrenar
+      </Link>
+
       <BotonAnadir />
       <BotonCamara />
     </main>
