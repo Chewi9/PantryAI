@@ -3,7 +3,7 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface IProduct extends Document {
   nombre: string;
   cantidad: number;
-  unidad: string; // ej: "kg", "unidades", "litros"
+  unidad: string;
   fechaAgregado: Date;
 }
 
@@ -14,5 +14,4 @@ const ProductSchema: Schema = new Schema({
   fechaAgregado: { type: Date, default: Date.now },
 });
 
-// Esto evita que Next.js intente compilar el modelo varias veces y dé error
 export default mongoose.models.Product || mongoose.model<IProduct>("Product", ProductSchema);

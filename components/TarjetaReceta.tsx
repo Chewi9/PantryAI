@@ -10,12 +10,12 @@ export default function TarjetaReceta({ receta }: { receta: any }) {
   const cocinar = async () => {
     setProcesando(true);
     try {
-      // Llamamos a la API que ya creaste para descontar ingredientes
       const res = await fetch("/api/cocinar", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ingredientesUsados: receta.ingredientes }),
       });
+
       
       if (res.ok) {
         alert("✅ ¡Ingredientes descontados de tu armario!");
@@ -32,7 +32,7 @@ export default function TarjetaReceta({ receta }: { receta: any }) {
   const eliminar = async () => {
     setProcesando(true);
     await fetch(`/api/recetas/${receta.id}`, { method: "DELETE" });
-    router.refresh(); // Recarga la lista
+    router.refresh();
   };
 
   return (

@@ -23,7 +23,7 @@ export default function BotonEditar({ id, nombreActual, cantidadActual, unidadAc
       });
       
       setAbierto(false);
-      router.refresh(); // Recarga los datos
+      router.refresh();
     } catch (error) {
       alert("Error al actualizar el producto.");
     } finally {
@@ -82,6 +82,7 @@ export default function BotonEditar({ id, nombreActual, cantidadActual, unidadAc
                     <option value="g">g</option>
                     <option value="litros">Litros</option>
                     <option value="ml">ml</option>
+                    <option value="uni">unidad</option>
                   </select>
                 </div>
               </div>

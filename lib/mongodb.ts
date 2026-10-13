@@ -6,8 +6,6 @@ if (!MONGODB_URI) {
   throw new Error("Por favor, define la variable MONGODB_URI en .env.local");
 }
 
-// Usamos una variable global para mantener la conexión activa en desarrollo
-// y no saturar la base de datos de MongoDB Atlas cada vez que guardamos un archivo.
 let cached = (global as any).mongoose;
 
 if (!cached) {

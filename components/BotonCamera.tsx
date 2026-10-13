@@ -21,7 +21,7 @@ export default function BotonCamara() {
         method: "POST",
         body: formData,
       });
-      // Recargamos la página para ver los nuevos productos
+
       router.refresh();
     } catch (error) {
       alert("Hubo un error al analizar la imagen.");
@@ -36,7 +36,7 @@ export default function BotonCamara() {
       <input
         type="file"
         accept="image/*"
-        capture="environment" // Esto fuerza a abrir la cámara trasera en el móvil
+        capture="environment"
         ref={fileInputRef}
         onChange={manejarSubida}
         className="hidden"

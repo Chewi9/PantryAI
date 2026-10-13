@@ -1,7 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
 const PerfilSchema = new Schema({
-  // Aquí guardaremos las máquinas que tienes en tu gimnasio
   equipamiento: { type: String, default: "" }
 });
 

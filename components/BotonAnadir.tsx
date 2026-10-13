@@ -12,7 +12,7 @@ export default function BotonAnadir() {
   const router = useRouter();
 
   const guardarProducto = async (e: React.FormEvent) => {
-    e.preventDefault(); // Evita que la página se recargue
+    e.preventDefault();
     if (!nombre.trim()) return;
     
     setGuardando(true);
@@ -24,12 +24,11 @@ export default function BotonAnadir() {
         body: JSON.stringify({ nombre, cantidad, unidad }),
       });
       
-      // Reseteamos el formulario y lo cerramos
       setNombre("");
       setCantidad(1);
       setUnidad("unidades");
       setAbierto(false);
-      router.refresh(); // Recarga la lista del armario
+      router.refresh();
     } catch (error) {
       alert("Hubo un error al guardar el producto.");
     } finally {
@@ -39,7 +38,6 @@ export default function BotonAnadir() {
 
   return (
     <>
-      {/* Botón flotante "+" (Posicionado a la izquierda de la cámara) */}
       <button 
         onClick={() => setAbierto(true)}
         className="fixed bottom-8 right-28 bg-emerald-500 text-white w-16 h-16 rounded-full shadow-lg flex items-center justify-center text-4xl pb-1 hover:bg-emerald-600 transition-transform hover:scale-105 active:scale-95"
@@ -47,7 +45,6 @@ export default function BotonAnadir() {
         +
       </button>
 
-      {/* Ventana Flotante (Modal) */}
       {abierto && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-3xl p-6 w-full max-w-sm shadow-2xl">
