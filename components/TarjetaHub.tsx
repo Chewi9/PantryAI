@@ -1,10 +1,10 @@
 import Link from "next/link";
+import type {ReactNode} from "react";
 
 interface Props {
   href: string;
-  icono: string;
+  icono: ReactNode;
   titulo: string;
-  descripcion: string;
   colorConfig: {
     borderHover: string;
     shadowHover: string;
@@ -12,7 +12,7 @@ interface Props {
   };
 }
 
-export default function TarjetaHub({ href, icono, titulo, descripcion, colorConfig }: Props) {
+export default function TarjetaHub({ href, icono, titulo, colorConfig }: Props) {
   return (
     <Link 
       href={href} 
@@ -24,7 +24,6 @@ export default function TarjetaHub({ href, icono, titulo, descripcion, colorConf
           {icono}
         </span>
         <h2 className="text-3xl font-bold text-white mb-3">{titulo}</h2>
-        <p className="text-gray-400 text-lg">{descripcion}</p>
       </div>
     </Link>
   );
