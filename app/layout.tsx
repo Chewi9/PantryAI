@@ -14,13 +14,13 @@ const geistMono = Geist_Mono({
 
 // Configuración de metadatos y PWA para iOS
 export const metadata: Metadata = {
-  title: "PantryAI - Tu Chef Inteligente",
-  description: "Escanea tu compra y genera recetas saludables al instante",
+  title: "VitaHub - Tu Asistente Vital",
+  description: "Nutrición inteligente y entrenamiento personalizado",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "PantryAI",
+    title: "VitaHub",
   },
 };
 

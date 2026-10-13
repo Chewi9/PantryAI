@@ -1,0 +1,62 @@
+@reference "tailwindcss";
+
+.mainContainer {
+  @apply min-h-screen bg-gray-50 pb-24;
+}
+
+.header {
+  @apply bg-emerald-500 text-white p-6 rounded-b-3xl shadow-md;
+}
+
+.title {
+  @apply text-3xl font-bold;
+}
+
+.subtitle {
+  @apply text-emerald-100 mt-2 mb-6;
+}
+
+.btnVolver {
+  @apply inline-block bg-gray-800 text-white px-4 py-2 rounded-lg hover:bg-gray-700 transition shadow;
+}
+
+.listContainer {
+  @apply p-6;
+}
+
+.emptyState {
+  @apply text-center text-gray-500 mt-10;
+}
+
+.productList {
+  @apply space-y-3;
+}
+
+.productItem {
+  @apply bg-white p-4 rounded-xl shadow-sm flex justify-between items-center border border-gray-100;
+}
+
+.productName {
+  @apply font-medium text-gray-800 capitalize flex-1;
+}
+
+.productQuantity {
+  @apply bg-emerald-100 text-emerald-800 py-1 px-3 rounded-full text-sm font-semibold;
+}
+
+.actionButtons {
+  @apply flex gap-1 ml-4;
+}
+
+/* Botones flotantes inferiores */
+.btnMenus {
+  @apply fixed bottom-24 left-8 bg-amber-500 text-white p-4 rounded-full shadow-lg flex items-center justify-center gap-2 font-bold hover:bg-amber-600 transition-transform hover:scale-105 active:scale-95;
+}
+
+.btnRemya {
+  @apply fixed bottom-8 left-8 bg-blue-600 text-white p-4 rounded-full shadow-lg flex items-center justify-center gap-2 font-bold hover:bg-blue-700 transition-transform hover:scale-105 active:scale-95;
+}
+
+.icon {
+  @apply w-6 h-6 fill-current;
+}

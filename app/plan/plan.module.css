@@ -1,0 +1,160 @@
+@reference "tailwindcss";
+
+.mainContainer {
+  @apply min-h-screen bg-gray-50 pb-12;
+}
+
+/* Cabecera */
+.header {
+  @apply bg-emerald-600 text-white p-6 rounded-b-3xl shadow-md flex justify-between items-center;
+}
+
+.title {
+  @apply text-3xl font-bold;
+}
+
+.subtitle {
+  @apply text-emerald-100 mt-1;
+}
+
+.btnBack {
+  @apply bg-emerald-700 p-2 rounded-lg hover:bg-emerald-800 transition;
+}
+
+/* Contenedor central */
+.contentWrapper {
+  @apply p-6 max-w-md mx-auto;
+}
+
+/* Tarjeta de bienvenida (Remya) */
+.welcomeCard {
+  @apply bg-emerald-50 rounded-2xl p-4 shadow-sm border border-emerald-100 flex items-center gap-4 mb-6 relative overflow-hidden;
+}
+
+.avatarWrapper {
+  @apply flex-shrink-0 animate-bounce;
+}
+
+.avatarImg {
+  @apply w-20 h-20 drop-shadow-md;
+}
+
+.welcomeText {
+  @apply font-bold text-emerald-800 text-lg leading-tight;
+}
+
+.welcomeSubtext {
+  @apply text-emerald-600 text-sm mt-1;
+}
+
+/* Formulario */
+.formCard {
+  @apply bg-white p-6 rounded-2xl shadow-sm border border-gray-100 mb-8 flex flex-col gap-4;
+}
+
+.formRow {
+  @apply flex gap-4;
+}
+
+.inputGroup {
+  @apply flex-1;
+}
+
+.label {
+  @apply text-gray-700 font-medium block mb-1;
+}
+
+.inputField {
+  @apply border border-gray-300 rounded-lg p-3 text-lg w-full text-black outline-none focus:border-emerald-500;
+}
+
+.btnGenerate {
+  @apply bg-emerald-500 text-white font-bold py-3 rounded-xl hover:bg-emerald-600 transition disabled:opacity-50 mt-2;
+}
+
+/* Errores */
+.errorBox {
+  @apply bg-red-50 text-red-600 p-4 rounded-lg mb-6 border border-red-200;
+}
+
+/* Contenedor del Plan */
+.planContainer {
+  @apply space-y-8;
+}
+
+/* Tarjeta de Día */
+.dayCard {
+  @apply bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden;
+}
+
+.dayHeader {
+  @apply bg-emerald-100 px-4 py-2 font-bold text-emerald-800;
+}
+
+.dayContent {
+  @apply p-4 space-y-6;
+}
+
+/* Tarjeta de Comida */
+.mealCard {
+  @apply border-b border-gray-100 last:border-0 pb-6 last:pb-0 relative;
+}
+
+.loadingOverlay {
+  @apply absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center z-10 rounded-lg;
+}
+
+.loadingText {
+  @apply font-bold text-emerald-600 animate-pulse;
+}
+
+.mealType {
+  @apply font-bold text-gray-800 text-lg;
+}
+
+.mealName {
+  @apply text-emerald-600 font-medium mb-3;
+}
+
+/* Ingredientes */
+.ingredientsBox {
+  @apply bg-gray-50 p-3 rounded-lg mb-4;
+}
+
+.ingredientsTitle {
+  @apply text-xs font-bold text-gray-500 uppercase mb-2;
+}
+
+.ingredientsList {
+  @apply list-disc pl-5 text-sm text-gray-700 space-y-1;
+}
+
+.ingredientQuantity {
+  @apply font-semibold;
+}
+
+/* Botones de acción */
+.actionsRow {
+  @apply flex flex-wrap gap-2;
+}
+
+.btnCook {
+  @apply bg-emerald-600 text-white px-3 py-2 rounded-lg text-sm font-semibold hover:bg-emerald-700 active:scale-95 transition-transform flex-1;
+}
+
+.btnReplace {
+  @apply bg-amber-100 text-amber-700 px-3 py-2 rounded-lg text-sm font-semibold hover:bg-amber-200 active:scale-95 transition-transform flex-1;
+}
+
+.btnDelete {
+  @apply bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm font-semibold hover:bg-red-100 active:scale-95 transition-transform;
+}
+
+.emptyDayMessage {
+  @apply text-gray-400 text-sm italic text-center py-4;
+}
+
+/* Botón Final de Guardar */
+.btnSaveMenu {
+  @apply w-full bg-blue-600 text-white font-bold py-4 rounded-xl text-lg shadow-md hover:bg-blue-700 transition-transform active:scale-95 mt-8;
+}

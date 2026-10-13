@@ -1,0 +1,125 @@
+@reference "tailwindcss";
+
+.mainContainer {
+  @apply min-h-screen bg-gray-900 pb-12;
+}
+
+/* Cabecera */
+.header {
+  @apply bg-emerald-600 text-white p-6 rounded-b-3xl shadow-md flex justify-between items-center;
+}
+
+.title {
+  @apply text-3xl font-bold;
+}
+
+.btnVolver {
+  @apply bg-emerald-700 p-2 rounded-lg hover:bg-emerald-800 transition;
+}
+
+/* Contenedor principal */
+.contentWrapper {
+  @apply p-4 sm:p-6 max-w-3xl mx-auto space-y-8;
+}
+
+.emptyState {
+  @apply text-center text-gray-400 mt-10;
+}
+
+/* Tarjeta de Rutina (Padre) */
+.routineCard {
+  @apply bg-gray-800 rounded-3xl overflow-hidden border border-gray-700 shadow-xl;
+}
+
+.routineHeader {
+  @apply bg-gray-700 p-4 flex justify-between items-center border-b border-gray-600;
+}
+
+.routineTitle {
+  @apply text-white font-bold text-xl capitalize;
+}
+
+.routineDate {
+  @apply text-gray-400 text-sm;
+}
+
+.btnDelete {
+  @apply bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white p-2 rounded-lg transition;
+}
+
+/* Días de la Rutina */
+.daysContainer {
+  @apply p-4 space-y-6;
+}
+
+.dayCard {
+  @apply border border-gray-600 rounded-xl overflow-hidden;
+}
+
+.dayHeader {
+  @apply bg-blue-900/50 px-4 py-2 font-bold text-blue-300 flex justify-between;
+}
+
+.exerciseList {
+  @apply p-4 space-y-4;
+}
+
+/* Tarjeta de Ejercicio Individual */
+.exerciseCard {
+  @apply bg-gray-700 p-4 rounded-xl flex flex-col gap-4;
+}
+
+.exerciseTop {
+  @apply flex flex-col sm:flex-row items-start sm:items-center gap-4;
+}
+
+/* Imágenes */
+.mediaWrapper {
+  @apply flex gap-2 flex-shrink-0 mx-auto sm:mx-0;
+}
+
+.mediaBox {
+  @apply w-24 h-24 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-500 shadow-inner;
+}
+
+.mediaImg {
+  @apply w-full h-full object-contain p-1;
+}
+
+.mediaFallback {
+  @apply text-3xl text-gray-400;
+}
+
+/* Textos de Ejercicio */
+.textWrapper {
+  @apply flex-1 w-full text-center sm:text-left mt-2 sm:mt-0;
+}
+
+.exerciseName {
+  @apply font-bold text-white text-xl leading-tight mb-2 capitalize;
+}
+
+.exerciseStats {
+  @apply text-blue-400 font-bold mb-2 text-sm bg-blue-900/30 inline-block px-3 py-1 rounded-full;
+}
+
+.exerciseNotes {
+  @apply text-gray-300 text-sm italic leading-relaxed bg-gray-800 p-2 rounded-lg border border-gray-600;
+}
+
+/* Instrucciones */
+.instructionsSection {
+  @apply mt-2 pt-3 border-t border-gray-600;
+}
+
+.instructionsHeading {
+  @apply text-gray-300 font-semibold mb-2 text-sm;
+}
+
+.instructionsList {
+  @apply list-decimal pl-5 space-y-1 text-xs text-gray-400;
+}
+
+.instructionItem {
+  @apply leading-relaxed;
+}

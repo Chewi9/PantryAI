@@ -4,17 +4,17 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
+import styles from "./guardadas.module.css";
+
 export default function RutinasGuardadasPage() {
   const [rutinas, setRutinas] = useState<any[]>([]);
   const [cargando, setCargando] = useState(true);
   
-  // Añadimos el estado para el diccionario de fotos igual que en la pantalla principal
   const [diccionarioFotos, setDiccionarioFotos] = useState<Record<string, string>>({});
 
   useEffect(() => {
     cargarRutinas();
 
-    // Cargamos el diccionario para saber qué número de foto va con cada ejercicio guardado
     fetch("/pt-BR.json")
       .then(res => res.json())
       .then(data => {
@@ -28,7 +28,7 @@ export default function RutinasGuardadasPage() {
         }
         setDiccionarioFotos(diccionarioInvertido);
       })
-      .catch(() => console.log("No se pudo cargar el diccionario pt-BR.json"));
+      .catch(() => console.log("No se pudo cargar el diccionario"));
   }, []);
 
   const cargarRutinas = async () => {
@@ -57,51 +57,50 @@ export default function RutinasGuardadasPage() {
   if (cargando) return <p className="text-white text-center mt-10">Cargando tus rutinas...</p>;
 
   return (
-    <main className="min-h-screen bg-gray-900 pb-12">
-      <header className="bg-emerald-600 text-white p-6 rounded-b-3xl shadow-md flex justify-between items-center">
+    <main className={styles.mainContainer}>
+      
+      <header className={styles.header}>
         <div>
-          <h1 className="text-3xl font-bold">Mis Rutinas 📁</h1>
-          <p className="text-emerald-200 mt-1">Guardadas para entrenar</p>
+          <h1 className={styles.title}>Mis Rutinas</h1>
         </div>
-        <Link href="/entrenamiento" className="bg-emerald-700 p-2 rounded-lg hover:bg-emerald-800 transition">
+        <Link href="/entrenamiento" className={styles.btnVolver}>
           ⬅️ Volver
         </Link>
       </header>
 
-      <div className="p-4 sm:p-6 max-w-3xl mx-auto space-y-8">
+      <div className={styles.contentWrapper}>
         {rutinas.length === 0 ? (
-          <div className="text-center text-gray-400 mt-10">
-            <p className="text-5xl mb-4">📭</p>
-            <p>Aún no has guardado ninguna rutina.</p>
+          <div className={styles.emptyState}>
+            <p>No hay rutina guardada.</p>
           </div>
         ) : (
           rutinas.map((rutina) => (
-            <div key={rutina._id} className="bg-gray-800 rounded-3xl overflow-hidden border border-gray-700 shadow-xl">
+            <div key={rutina._id} className={styles.routineCard}>
               
               {/* Cabecera de la Rutina */}
-              <div className="bg-gray-700 p-4 flex justify-between items-center border-b border-gray-600">
+              <div className={styles.routineHeader}>
                 <div>
-                  <h2 className="text-white font-bold text-xl capitalize">{rutina.nombre}</h2>
-                  <p className="text-gray-400 text-sm">{new Date(rutina.fechaGuardado).toLocaleDateString()}</p>
+                  <h2 className={styles.routineTitle}>{rutina.nombre}</h2>
+                  <p className={styles.routineDate}>{new Date(rutina.fechaGuardado).toLocaleDateString()}</p>
                 </div>
-                <button onClick={() => borrarRutina(rutina._id)} className="bg-red-500/20 text-red-400 hover:bg-red-500 hover:text-white p-2 rounded-lg transition">
+                <button onClick={() => borrarRutina(rutina._id)} className={styles.btnDelete}>
                   🗑️ Borrar
                 </button>
               </div>
 
               {/* Días de la rutina */}
-              <div className="p-4 space-y-6">
+              <div className={styles.daysContainer}>
                 {rutina.dias.map((dia: any, i: number) => (
-                  <div key={i} className="border border-gray-600 rounded-xl overflow-hidden">
-                    <div className="bg-blue-900/50 px-4 py-2 font-bold text-blue-300 flex justify-between">
+                  <div key={i} className={styles.dayCard}>
+                    
+                    <div className={styles.dayHeader}>
                       <span>Día {dia.dia}</span>
                       <span>{dia.grupoMuscular}</span>
                     </div>
                     
-                    <div className="p-4 space-y-4">
+                    <div className={styles.exerciseList}>
                       {dia.ejercicios.map((ej: any, j: number) => {
                         
-                        // 1. Buscamos el código de la foto usando el nombre en portugués guardado
                         const nombreLimpio = (ej.nombre_pt || ej.nombre || "")
                           .toLowerCase()
                           .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
@@ -109,7 +108,6 @@ export default function RutinasGuardadasPage() {
 
                         let codigoFoto = diccionarioFotos[nombreLimpio];
 
-                        // Buscador inteligente por si acaso
                         if (!codigoFoto && Object.keys(diccionarioFotos).length > 0) {
                           const palabras = nombreLimpio.split(" ").filter((p: string) => p.length > 3);
                           let maxCoincidencias = 0;
@@ -126,69 +124,65 @@ export default function RutinasGuardadasPage() {
                         }
 
                         return (
-                          <div key={j} className="bg-gray-700 p-4 rounded-xl flex flex-col gap-4">
+                          <div key={j} className={styles.exerciseCard}>
                             
-                            {/* PARTE SUPERIOR: IMÁGENES + TEXTOS */}
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <div className={styles.exerciseTop}>
                               
-                              {/* --- ZONA VISUAL: PORTADA Y GIF --- */}
-                              <div className="flex gap-2 flex-shrink-0 mx-auto sm:mx-0">
-                                {/* Portada (JPG) */}
-                                <div className="w-24 h-24 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-500 shadow-inner">
+                              <div className={styles.mediaWrapper}>
+                                {/* Portada */}
+                                <div className={styles.mediaBox}>
                                   {codigoFoto ? (
                                     <img 
                                       src={`/img/${codigoFoto}.jpg`} 
                                       alt={`Portada de ${ej.nombre}`}
-                                      className="w-full h-full object-contain p-1"
+                                      className={styles.mediaImg}
                                       onError={(e) => {
                                         e.currentTarget.style.display = 'none';
                                         if (e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-3xl text-gray-400">🖼️</span>';
                                       }}
                                     />
                                   ) : (
-                                    <span className="text-3xl text-gray-400">🖼️</span>
+                                    <span className={styles.mediaFallback}>Error</span>
                                   )}
                                 </div>
 
-                                {/* Animación (GIF) */}
-                                <div className="w-24 h-24 bg-white rounded-lg overflow-hidden flex items-center justify-center border border-gray-500 shadow-inner">
+                                {/* Gif */}
+                                <div className={styles.mediaBox}>
                                   {codigoFoto ? (
                                     <img 
                                       src={`/gif/${codigoFoto}.gif`} 
                                       alt={`Animación de ${ej.nombre}`}
-                                      className="w-full h-full object-contain p-1"
+                                      className={styles.mediaImg}
                                       onError={(e) => {
                                         e.currentTarget.style.display = 'none';
                                         if (e.currentTarget.parentElement) e.currentTarget.parentElement.innerHTML = '<span class="text-3xl text-gray-400">▶️</span>';
                                       }}
                                     />
                                   ) : (
-                                    <span className="text-3xl text-gray-400">▶️</span>
+                                    <span className={styles.mediaFallback}>Error</span>
                                   )}
                                 </div>
                               </div>
                               
-                              {/* TEXTOS BÁSICOS */}
-                              <div className="flex-1 w-full text-center sm:text-left mt-2 sm:mt-0">
-                                <h4 className="font-bold text-white text-xl leading-tight mb-2 capitalize">{ej.nombre}</h4>
-                                <p className="text-blue-400 font-bold mb-2 text-sm bg-blue-900/30 inline-block px-3 py-1 rounded-full">
+                              <div className={styles.textWrapper}>
+                                <h4 className={styles.exerciseName}>{ej.nombre}</h4>
+                                <p className={styles.exerciseStats}>
                                   🔄 {ej.series} series x {ej.repeticiones} reps
                                 </p>
                                 {ej.notas && (
-                                  <p className="text-gray-300 text-sm italic leading-relaxed bg-gray-800 p-2 rounded-lg border border-gray-600">
+                                  <p className={styles.exerciseNotes}>
                                     💡 {ej.notas}
                                   </p>
                                 )}
                               </div>
                             </div>
 
-                            {/* PARTE INFERIOR: INSTRUCCIONES PASO A PASO */}
                             {ej.instrucciones && ej.instrucciones.length > 0 && (
-                              <div className="mt-2 pt-3 border-t border-gray-600">
-                                <h5 className="text-gray-300 font-semibold mb-2 text-sm">Cómo realizarlo:</h5>
-                                <ol className="list-decimal pl-5 space-y-1 text-xs text-gray-400">
+                              <div className={styles.instructionsSection}>
+                                <h5 className={styles.instructionsHeading}>Cómo realizarlo:</h5>
+                                <ol className={styles.instructionsList}>
                                   {ej.instrucciones.map((paso: string, index: number) => (
-                                    <li key={index} className="leading-relaxed">{paso}</li>
+                                    <li key={index} className={styles.instructionItem}>{paso}</li>
                                   ))}
                                 </ol>
                               </div>
