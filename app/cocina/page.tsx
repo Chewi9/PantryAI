@@ -6,7 +6,6 @@ import BotonCamara from "@/components/BotonCamera";
 import BotonAnadir from "@/components/BotonAnadir";
 import BotonEditar from "@/components/BotonEditar";
 
-// Importamos nuestros estilos limpios
 import styles from "./cocina.module.css";
 
 export const dynamic = "force-dynamic";
@@ -27,17 +26,16 @@ export default async function CocinaPage() {
   return (
     <main className={styles.mainContainer}>
       
-      {/* Cabecera */}
       <header className={styles.header}>
         <h1 className={styles.title}>Pantry & Chef</h1>
         <p className={styles.subtitle}>Lo que tienes en la estantería</p>
 
         <Link href="/" className={styles.btnVolver}>
-          ⬅️ Volver al Hub
+          ⬅️ Volver
         </Link>
       </header>
 
-      {/* Lista de Productos */}
+
       <div className={styles.listContainer}>
         {productos.length === 0 ? (
           <div className={styles.emptyState}>

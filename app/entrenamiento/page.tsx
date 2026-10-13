@@ -4,7 +4,6 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
-// 1. Importamos los estilos
 import styles from "./entrenamiento.module.css";
 
 export default function EntrenamientoPage() {
@@ -86,7 +85,6 @@ export default function EntrenamientoPage() {
   return (
     <main className={styles.mainContainer}>
       
-      {/* Cabecera */}
       <header className={styles.header}>
         <div>
           <h1 className={styles.title}>Entrenamiento</h1>
@@ -103,7 +101,6 @@ export default function EntrenamientoPage() {
 
       <div className={styles.contentWrapper}>
         
-        {/* Formulario */}
         <div className={styles.formCard}>
           <div className={styles.inputGroup}>
             <label className={styles.label}>Días a la semana</label>
@@ -139,7 +136,6 @@ export default function EntrenamientoPage() {
           </button>
         </div>
 
-        {/* Resultados de la Rutina */}
         {rutina && (
           <div className={styles.routineList}>
             {rutina.map((diaInfo, i) => (
@@ -153,7 +149,7 @@ export default function EntrenamientoPage() {
                 <div className={styles.exerciseList}>
                   {diaInfo.ejercicios.map((ej: any, j: number) => {
                     
-                    // Buscador de Fotos
+
                     const nombreLimpio = (ej.nombre_pt || ej.nombre).toLowerCase().trim(); 
                     let codigoFoto = diccionarioFotos[nombreLimpio];
 
@@ -178,9 +174,8 @@ export default function EntrenamientoPage() {
                         
                         <div className={styles.exerciseTop}>
                           
-                          {/* Imágenes */}
                           <div className={styles.mediaWrapper}>
-                            {/* Portada */}
+
                             <div className={styles.mediaBox}>
                               {codigoFoto ? (
                                 <img 
@@ -196,7 +191,8 @@ export default function EntrenamientoPage() {
                                 <span className={styles.mediaFallback}>Error</span>
                               )}
                             </div>
-                            {/* GIF */}
+
+
                             <div className={styles.mediaBox}>
                               {codigoFoto ? (
                                 <img 
@@ -214,7 +210,7 @@ export default function EntrenamientoPage() {
                             </div>
                           </div>
                           
-                          {/* Textos del ejercicio */}
+
                           <div className={styles.textWrapper}>
                             <h4 className={styles.exerciseName}>{ej.nombre}</h4>
                             <p className={styles.exerciseStats}>
@@ -228,7 +224,7 @@ export default function EntrenamientoPage() {
                           </div>
                         </div>
 
-                        {/* Instrucciones */}
+
                         {ej.instrucciones && ej.instrucciones.length > 0 && (
                           <div className={styles.instructionsSection}>
                             <h5 className={styles.instructionsHeading}>Cómo realizarlo:</h5>

@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-// 1. Importamos nuestros estilos
 import styles from "./recetas.module.css";
 
 export default function RecetasPage() {
@@ -38,7 +37,6 @@ export default function RecetasPage() {
       <header className={styles.header}>
         <div>
           <h1 className={styles.title}>Mis Menús 📖</h1>
-          <p className={styles.subtitle}>Semanas planificadas</p>
         </div>
         <Link href="/cocina" className={styles.btnBack}>
           ⬅️ Pantry

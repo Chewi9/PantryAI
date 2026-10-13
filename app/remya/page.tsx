@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-// 1. Importamos nuestros estilos
 import styles from "./plan.module.css";
 
 export default function PlanPage() {
@@ -126,7 +125,7 @@ export default function PlanPage() {
 
       <div className={styles.contentWrapper}>
 
-        {/* Tarjeta de bienvenida de Remya */}
+
         <div className={styles.welcomeCard}>
           <div className={styles.avatarWrapper}>
             <img src="/remya.svg" alt="Remya" className={styles.avatarImg} />
@@ -137,7 +136,7 @@ export default function PlanPage() {
           </div>
         </div>
 
-        {/* Formulario */}
+
         <div className={styles.formCard}>
           <div className={styles.formRow}>
             <div className={styles.inputGroup}>
@@ -151,7 +150,7 @@ export default function PlanPage() {
             <div className={styles.inputGroup}>
               <label className={styles.label}>Personas</label>
               <input 
-                type="number" min="1" max="10" 
+                type="number" min="1" max="5" 
                 value={comensales} onChange={(e) => setComensales(e.target.value)}
                 className={styles.inputField}
               />
@@ -168,14 +167,14 @@ export default function PlanPage() {
           </div>
 
           <button onClick={generarPlan} disabled={cargando} className={styles.btnGenerate}>
-            {cargando ? "✨ Calculando raciones..." : "Generar Plan"}
+            {cargando ? "Calculando raciones..." : "Generar Plan"}
           </button>
         </div>
 
-        {/* Alertas de error */}
+
         {error && <div className={styles.errorBox}>{error}</div>}
 
-        {/* Resultados del Plan */}
+
         {plan && (
           <>
             <div className={styles.planContainer}>
@@ -193,7 +192,7 @@ export default function PlanPage() {
                       return (
                         <div key={comidaIndex} className={styles.mealCard}>
                           
-                          {/* Pantalla de carga superpuesta al cambiar receta */}
+
                           {isReemplazando && (
                             <div className={styles.loadingOverlay}>
                               <span className={styles.loadingText}>Pensando otra opción... 🤔</span>
@@ -203,7 +202,7 @@ export default function PlanPage() {
                           <h3 className={styles.mealType}>{comida.tipo}</h3>
                           <p className={styles.mealName}>{comida.receta}</p>
                           
-                          {/* Ingredientes de la comida */}
+
                           <div className={styles.ingredientsBox}>
                             <p className={styles.ingredientsTitle}>Ingredientes a usar:</p>
                             <ul className={styles.ingredientsList}>
@@ -215,7 +214,7 @@ export default function PlanPage() {
                             </ul>
                           </div>
 
-                          {/* Botones de la comida */}
+
                           <div className={styles.actionsRow}>
                             <button 
                               onClick={() => cocinarReceta(comida, diaIndex, comidaIndex)}
@@ -243,7 +242,7 @@ export default function PlanPage() {
                       );
                     })}
                     
-                    {/* Mensaje cuando se vacía un día */}
+
                     {diaInfo.comidas.length === 0 && (
                       <p className={styles.emptyDayMessage}>Has completado o descartado todas las comidas de este día.</p>
                     )}

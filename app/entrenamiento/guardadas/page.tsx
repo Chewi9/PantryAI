@@ -77,7 +77,7 @@ export default function RutinasGuardadasPage() {
           rutinas.map((rutina) => (
             <div key={rutina._id} className={styles.routineCard}>
               
-              {/* Cabecera de la Rutina */}
+
               <div className={styles.routineHeader}>
                 <div>
                   <h2 className={styles.routineTitle}>{rutina.nombre}</h2>
@@ -88,7 +88,7 @@ export default function RutinasGuardadasPage() {
                 </button>
               </div>
 
-              {/* Días de la rutina */}
+
               <div className={styles.daysContainer}>
                 {rutina.dias.map((dia: any, i: number) => (
                   <div key={i} className={styles.dayCard}>
@@ -129,7 +129,7 @@ export default function RutinasGuardadasPage() {
                             <div className={styles.exerciseTop}>
                               
                               <div className={styles.mediaWrapper}>
-                                {/* Portada */}
+
                                 <div className={styles.mediaBox}>
                                   {codigoFoto ? (
                                     <img 
@@ -146,7 +146,7 @@ export default function RutinasGuardadasPage() {
                                   )}
                                 </div>
 
-                                {/* Gif */}
+
                                 <div className={styles.mediaBox}>
                                   {codigoFoto ? (
                                     <img 
